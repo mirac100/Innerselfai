@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Innerself AI</title>
+<link rel="manifest" href="/manifest.json">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Innerself AI">
+<meta name="theme-color" content="#080808">
+<link rel="apple-touch-icon" href="/icon.png">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Instrument+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080808;--s1:#111;--s2:#181818;--b1:#202020;--b2:#2c2c2c;--text:#f0f0f0;--m1:#505050;--m2:#808080;--w:#fff;--blue:#5b9cf6;--teal:#3dd8c8;--rose:#f472b6;--green:#4ade80;--purple:#a78bfa}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--text);font-family:'Instrument Sans',sans-serif;min-height:100vh;overflow-x:hidden}
+.brand-name{font-family:'Syne',sans-serif;font-weight:300;font-size:2.8rem;color:#e0e8ff}
+.brand-name span{font-weight:800;background:linear-gradient(135deg,var(--blue),var(--teal));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.card{width:100%;max-width:400px;background:var(--s1);border:1px solid var(--b1);border-radius:24px;padding:2rem;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(91,156,246,0.4),transparent)}
+.fi{width:100%;background:var(--s2);border:1px solid var(--b2);border-radius:12px;padding:0.85rem 1rem;color:var(--w);font-family:'Instrument Sans',sans-serif;font-size:0.95rem;outline:none;margin-bottom:1.2rem}
+.fi:focus{border-color:var(--blue)}.fi::placeholder{color:var(--m1)}
+.go-btn{width:100%;padding:1rem;border-radius:14px;border:none;background:linear-gradient(135deg,var(--blue),var(--teal));color:#080808;font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;cursor:pointer}
+.cgrid{display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;margin-bottom:1.4rem}
+.copt{background:var(--s2);border:1px solid var(--b2);border-radius:16px;padding:1.2rem 1rem;cursor:pointer;text-align:center}
+.copt.sk{border-color:var(--blue);background:rgba(91,156,246,0.07)}
+.copt.sn{border-color:var(--rose);background:rgba(244,114,182,0.07)}
+.ce{font-size:2rem;display:block;margin-bottom:0.5rem}
+.cn{font-family:'Syne',sans-serif;font-weight:700;font-size:1rem;display:block;margin-bottom:0.4rem}
+.copt.sk .cn{color:var(--blue)}.copt.sn .cn{color:var(--rose)}
+.cd{font-size:0.72rem;color:var(--m2);line-height:1.5}
+.lrow{display:grid;grid-template-columns:1fr 1fr;gap:0.6rem;margin-bottom:1.8rem}
+.lopt{padding:0.65rem;border-radius:10px;border:1px solid var(--b2);background:var(--s2);color:var(--m2);cursor:pointer;font-size:0.85rem;text-align:center}
+.lopt.active{border-color:var(--teal);color:var(--teal);background:rgba(61,216,200,0.07)}
+.screen{display:none;min-height:100vh;padding-bottom:6rem}
+.screen.active{display:block}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:1.4rem 1.5rem 0}
+.tlogo{font-family:'Syne',sans-serif;font-weight:300;font-size:1.4rem;color:#e0e8ff}
+.tlogo span{font-weight:800;background:linear-gradient(135deg,var(--blue),var(--teal));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.spill{display:flex;align-items:center;gap:0.3rem;background:rgba(91,156,246,0.1);border:1px solid rgba(91,156,246,0.2);border-radius:20px;padding:0.3rem 0.75rem;font-size:0.76rem;color:var(--blue)}
+.lpill{background:var(--s1);border:1px solid var(--b2);border-radius:20px;padding:0.3rem 0.75rem;font-size:0.76rem;color:var(--m2);cursor:pointer}
+.hero{padding:1.5rem 1.5rem 0.5rem}
+.hname{font-family:'Syne',sans-serif;font-weight:800;font-size:2.4rem;line-height:1.05}
+.hname .hl{background:linear-gradient(135deg,var(--blue),var(--teal));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.mbadge{display:inline-flex;align-items:center;gap:0.4rem;margin-top:0.6rem;background:var(--s1);border:1px solid var(--b1);border-radius:20px;padding:0.3rem 0.8rem;font-size:0.78rem;color:var(--m2);cursor:pointer}
+.lbwrap{margin:0.5rem 1.5rem 0;background:var(--s1);border:1px solid var(--b1);border-radius:12px;padding:0.7rem 1rem}
+.lbtop{display:flex;justify-content:space-between;margin-bottom:0.4rem;font-size:0.72rem;color:var(--m2)}
+.lbbg{height:4px;background:var(--s2);border-radius:2px;overflow:hidden}
+.lbfill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--blue),var(--teal));transition:width 0.4s}
+.ewrap{padding:0 1.5rem;margin:0.8rem 0 1.2rem}
+.ebtn{width:100%;padding:1rem;border-radius:16px;border:1px solid rgba(244,114,182,0.3);background:rgba(244,114,182,0.06);color:var(--rose);font-family:'Syne',sans-serif;font-weight:700;font-size:0.88rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:0.6rem}
+.ccard{margin:0 1.5rem 1.2rem;background:var(--s1);border:1px solid var(--b1);border-radius:22px;overflow:hidden;position:relative}
+.ccard::before{content:'';position:absolute;top:0;left:0;right:0;height:1px}
+.ccard.kareem::before{background:linear-gradient(90deg,transparent,rgba(91,156,246,0.4),transparent)}
+.ccard.nour::before{background:linear-gradient(90deg,transparent,rgba(244,114,182,0.4),transparent)}
+.cctop{display:flex;align-items:center;gap:0.9rem;padding:1.3rem;border-bottom:1px solid var(--b1)}
+.ccav{width:44px;height:44px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:1.4rem}
+.ccav.kareem{background:rgba(91,156,246,0.12);border:1px solid rgba(91,156,246,0.25)}
+.ccav.nour{background:rgba(244,114,182,0.12);border:1px solid rgba(244,114,182,0.25)}
+.ccname{font-family:'Syne',sans-serif;font-weight:700;font-size:0.95rem}
+.ccname.kareem{color:var(--blue)}.ccname.nour{color:var(--rose)}
+.ccsub{font-size:0.72rem;color:var(--m2);margin-top:0.1rem}
+.odot{width:7px;height:7px;border-radius:50%;background:var(--green);margin-left:auto;box-shadow:0 0 6px rgba(74,222,128,0.5);animation:blink 2s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+.ccmsg{padding:1.1rem 1.3rem;min-height:70px;font-size:0.95rem;line-height:1.75}
+.ccmsg.loading{color:var(--m2);font-style:italic;animation:pulse 1.4s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.35}}
+.chist{max-height:200px;overflow-y:auto;padding:0 1.3rem;display:flex;flex-direction:column;gap:0.55rem;scrollbar-width:none;margin-bottom:0.8rem}
+.chist::-webkit-scrollbar{display:none}
+.bub{padding:0.65rem 0.95rem;border-radius:14px;font-size:0.87rem;line-height:1.55;max-width:85%}
+.bu{background:rgba(91,156,246,0.12);border:1px solid rgba(91,156,246,0.2);align-self:flex-end;border-bottom-right-radius:4px}
+.bc{background:var(--s2);border:1px solid var(--b2);align-self:flex-start;border-bottom-left-radius:4px}
+.cinrow{display:flex;gap:0.6rem;padding:0 1.3rem 1.3rem}
+.cinp{flex:1;background:var(--s2);border:1px solid var(--b2);border-radius:12px;padding:0.75rem 1rem;color:var(--w);font-family:'Instrument Sans',sans-serif;font-size:0.88rem;outline:none}
+.cinp:focus{border-color:var(--blue)}.cinp::placeholder{color:var(--m1)}
+.csend{width:40px;height:40px;border-radius:11px;border:none;background:linear-gradient(135deg,var(--blue),var(--teal));color:#080808;font-size:1rem;cursor:pointer;font-weight:700;display:flex;align-items:center;justify-content:center}
+.slabel{font-family:'Syne',sans-serif;font-weight:700;font-size:0.72rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--m2);padding:0 1.5rem;margin-bottom:0.7rem}
+.qgrid{display:grid;grid-template-columns:1fr 1fr;gap:0.65rem;padding:0 1.5rem;margin-bottom:1.4rem}
+.qc{background:var(--s1);border:1px solid var(--b1);border-radius:16px;padding:1rem;cursor:pointer;position:relative;overflow:hidden}
+.qc::after{content:'';position:absolute;top:0;left:0;right:0;height:1px}
+.qc.gym::after{background:linear-gradient(90deg,transparent,rgba(74,222,128,0.4),transparent)}
+.qc.biz::after{background:linear-gradient(90deg,transparent,rgba(91,156,246,0.4),transparent)}
+.qc.mind::after{background:linear-gradient(90deg,transparent,rgba(167,139,250,0.4),transparent)}
+.qc.money::after{background:linear-gradient(90deg,transparent,rgba(61,216,200,0.4),transparent)}
+.qi{font-size:1.3rem;margin-bottom:0.5rem;display:block}
+.qt{font-family:'Syne',sans-serif;font-weight:600;font-size:0.82rem}
+.qs{font-size:0.7rem;color:var(--m2)}
+.swrap{padding:0 1.5rem;margin-bottom:1.4rem}
+.si{display:flex;align-items:center;gap:0.9rem;padding:0.9rem 1rem;background:var(--s1);border:1px solid var(--b1);border-radius:13px;margin-bottom:0.55rem}
+.st{font-size:0.8rem;color:var(--m2);min-width:44px}
+.sd{width:6px;height:6px;border-radius:50%}
+.sl{font-size:0.9rem;flex:1}
+.stag{font-size:0.62rem;padding:0.18rem 0.5rem;border-radius:20px;text-transform:uppercase}
+.arow{display:flex;gap:0.6rem;margin-top:0.2rem}
+.ainp{flex:1;background:var(--s1);border:1px solid var(--b1);border-radius:11px;padding:0.75rem 0.9rem;color:var(--w);font-family:'Instrument Sans',sans-serif;font-size:0.87rem;outline:none}
+.ainp:focus{border-color:var(--teal)}.ainp::placeholder{color:var(--m1)}
+.abtn{width:40px;height:40px;border-radius:11px;border:1px solid var(--b2);background:var(--s1);color:var(--teal);font-size:1.3rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.page-title{font-family:'Syne',sans-serif;font-weight:800;font-size:1.8rem;padding:1.2rem 1.5rem 0.2rem}
+.page-sub{font-size:0.85rem;color:var(--m2);padding:0 1.5rem;margin-bottom:1.4rem}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.7rem;margin-bottom:1.2rem;padding:0 1.5rem}
+.stat-card{background:var(--s1);border:1px solid var(--b1);border-radius:16px;padding:1.1rem;text-align:center}
+.stat-num{font-family:'Syne',sans-serif;font-weight:800;font-size:2rem;background:linear-gradient(135deg,var(--blue),var(--teal));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.stat-label{font-size:0.72rem;color:var(--m2);margin-top:0.2rem;text-transform:uppercase}
+.settings-wrap{padding:0 1.5rem}
+.setting-item{display:flex;align-items:center;gap:1rem;padding:1rem 1.1rem;background:var(--s1);border:1px solid var(--b1);border-radius:14px;margin-bottom:0.5rem;cursor:pointer}
+.set-icon{font-size:1.2rem;width:32px;text-align:center}
+.set-label{flex:1;font-size:0.9rem}
+.set-value{font-size:0.82rem;color:var(--m2)}
+.setting-item.danger .set-label{color:var(--rose)}
+.goals-wrap{padding:0 1.5rem}
+.goal-item{background:var(--s1);border:1px solid var(--b1);border-radius:16px;padding:1.1rem;margin-bottom:0.8rem;position:relative;overflow:hidden}
+.goal-item::before{content:'';position:absolute;top:0;left:0;bottom:0;width:3px;border-radius:3px 0 0 3px}
+.goal-item.blue::before{background:var(--blue)}.goal-item.teal::before{background:var(--teal)}
+.goal-item.rose::before{background:var(--rose)}.goal-item.green::before{background:var(--green)}.goal-item.purple::before{background:var(--purple)}
+.goal-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:0.5rem}
+.goal-title-txt{font-family:'Syne',sans-serif;font-weight:600;font-size:0.92rem}
+.goal-pct{font-size:0.78rem;color:var(--m2)}
+.goal-bar-bg{height:4px;background:var(--s2);border-radius:2px;overflow:hidden;margin-bottom:0.5rem}
+.goal-bar-fill{height:100%;border-radius:2px}
+.goal-delete{position:absolute;top:0.8rem;right:0.8rem;background:none;border:none;color:var(--m1);font-size:1rem;cursor:pointer}
+.add-goal-card{background:var(--s1);border:1px dashed var(--b2);border-radius:16px;padding:1.2rem;margin-bottom:1.5rem}
+.goal-inp{width:100%;background:var(--s2);border:1px solid var(--b2);border-radius:10px;padding:0.7rem 0.9rem;color:var(--w);font-family:'Instrument Sans',sans-serif;font-size:0.88rem;outline:none;margin-bottom:0.6rem}
+.goal-inp::placeholder{color:var(--m1)}
+.goal-add-btn{width:100%;padding:0.8rem;border-radius:12px;border:none;background:linear-gradient(135deg,var(--blue),var(--teal));color:#080808;font-family:'Syne',sans-serif;font-weight:700;cursor:pointer}
+.cpick-row{display:flex;gap:0.5rem;margin-bottom:0.6rem}
+.cpick{width:26px;height:26px;border-radius:50%;cursor:pointer;border:2px solid transparent}
+.cpick.active{border-color:var(--w);transform:scale(1.15)}
+.bnav{position:fixed;bottom:0;left:0;right:0;background:rgba(8,8,8,0.95);backdrop-filter:blur(24px);border-top:1px solid var(--b1);display:flex;padding:0.65rem 0 0.85rem;z-index:100}
+.ni{flex:1;display:flex;flex-direction:column;align-items:center;gap:0.22rem;cursor:pointer;opacity:0.3}
+.ni.active{opacity:1}
+.nico{font-size:1.15rem}
+.nlbl{font-size:0.58rem;letter-spacing:0.12em;text-transform:uppercase;font-weight:500}
+.ni.active .nlbl{color:var(--blue)}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;align-items:center;justify-content:center;padding:1.5rem}
+.modal-overlay.show{display:flex}
+.modal{background:var(--s1);border:1px solid var(--b1);border-radius:20px;padding:1.8rem;width:100%;max-width:360px}
+.modal h3{font-family:'Syne',sans-serif;font-weight:700;font-size:1.2rem;margin-bottom:0.4rem}
+.modal p{color:var(--m2);font-size:0.85rem;margin-bottom:1.4rem;line-height:1.6}
+.modal-inp{width:100%;background:var(--s2);border:1px solid var(--b2);border-radius:12px;padding:0.85rem 1rem;color:var(--w);font-family:'Instrument Sans',sans-serif;font-size:0.95rem;outline:none;margin-bottom:1rem}
+.modal-btns{display:flex;gap:0.6rem}
+.modal-cancel{flex:1;padding:0.8rem;border-radius:12px;border:1px solid var(--b2);background:transparent;color:var(--m2);font-family:'Syne',sans-serif;font-weight:600;cursor:pointer}
+.modal-confirm{flex:1;padding:0.8rem;border-radius:12px;border:none;background:linear-gradient(135deg,var(--blue),var(--teal));color:#080808;font-family:'Syne',sans-serif;font-weight:700;cursor:pointer}
+</style>
+</head>
+<body>
+
+<!-- API SETUP -->
+<div id="apiSetup" style="display:none;min-height:100vh;flex-direction:column;align-items:center;justify-content:center;padding:2rem;background:var(--bg)">
+  <div style="text-align:center;margin-bottom:2rem">
+    <div class="brand-name">Inner<span>self</span> AI</div>
+    <div style="font-size:0.7rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--m1);margin-top:0.3rem">Meet the best version of yourself</div>
+  </div>
+  <div class="card" style="max-width:400px;width:100%">
+    <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:1.2rem;margin-bottom:0.4rem">🔑 Activate AI</div>
+    <div style="color:var(--m2);font-size:0.85rem;margin-bottom:1.5rem;line-height:1.6">Enter your Anthropic API key to activate Kareem and Nour. Stored only on your device. 🔒</div>
+    <input id="apiKeyInp" class="fi" placeholder="sk-ant-api03-..." />
+    <button class="go-btn" onclick="saveApiKey()">ACTIVATE →</button>
+    <div style="text-align:center;margin-top:0.8rem;font-size:0.72rem;color:var(--m1)">Your key never leaves your device</div>
+  </div>
+</div>
+
+<!-- ONBOARDING -->
+<div id="onboarding" style="display:none;min-height:100vh;flex-direction:column;align-items:center;justify-content:center;padding:2rem 1.5rem;background:var(--bg)">
+  <div style="text-align:center;margin-bottom:3rem">
+    <div class="brand-name">Inner<span>self</span> AI</div>
+    <div style="font-size:0.7rem;letter-spacing:0.3em;text-transform:uppercase;color:var(--m1);margin-top:0.3rem">Meet the best version of yourself</div>
+  </div>
+  <div class="card">
+    <h2 style="font-family:'Syne',sans-serif;font-weight:700;font-size:1.4rem;margin-bottom:0.3rem">Who are you?</h2>
+    <p style="color:var(--m2);font-size:0.85rem;line-height:1.6;margin-bottom:1.8rem">Your personal AI coach. Always there for you.</p>
+    <span style="font-size:0.68rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--m1);margin-bottom:0.5rem;display:block">Your Name</span>
+    <input class="fi" id="uName" placeholder="Enter your name..." />
+    <span style="font-size:0.68rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--m1);margin-bottom:0.5rem;display:block">Choose your coach</span>
+    <div class="cgrid">
+      <div class="copt sk" id="ok" onclick="pickCoach('kareem')">
+        <span class="ce">🦁</span><span class="cn">Kareem</span>
+        <span class="cd">Your brother in every moment. He lifts you up and never lets you quit.</span>
+      </div>
+      <div class="copt" id="on" onclick="pickCoach('nour')">
+        <span class="ce">🌙</span><span class="cn">Nour</span>
+        <span class="cd">Your light on dark days. She warms your heart and keeps you moving forward.</span>
+      </div>
+    </div>
+    <span style="font-size:0.68rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--m1);margin-bottom:0.5rem;display:block">Language</span>
+    <div class="lrow">
+      <div class="lopt active" id="len" onclick="pickLang('en')">🇬🇧 English</div>
+      <div class="lopt" id="lde" onclick="pickLang('de')">🇩🇪 Deutsch</div>
+    </div>
+    <button class="go-btn" onclick="goMood()">LET'S GO →</button>
+  </div>
+</div>
+
+<!-- MOOD -->
+<div id="moodScreen" style="display:none;min-height:100vh;flex-direction:column;align-items:center;justify-content:center;padding:2rem;background:var(--bg)">
+  <div class="card" style="max-width:400px;width:100%;text-align:center">
+    <span style="font-size:3rem;margin-bottom:1rem;display:block" id="mav">🦁</span>
+    <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:1.3rem;margin-bottom:0.5rem" id="mq">How are you feeling today?</div>
+    <div style="color:var(--m2);font-size:0.85rem;margin-bottom:2rem" id="ms">Be honest — your coach adjusts to your energy.</div>
+    <div style="display:flex;justify-content:center;gap:0.8rem;margin-bottom:1.5rem;flex-wrap:wrap">
+      <button style="width:54px;height:54px;border-radius:16px;border:1px solid var(--b2);background:var(--s2);font-size:1.6rem;cursor:pointer;display:flex;align-items:center;justify-content:center" class="meb" onclick="pickMood(this,'😴','exhausted')">😴</button>
+      <button style="width:54px;height:54px;border-radius:16px;border:1px solid var(--b2);background:var(--s2);font-size:1.6rem;cursor:pointer;display:flex;align-items:center;justify-content:center" class="meb" onclick="pickMood(this,'😔','low')">😔</button>
+      <button style="width:54px;height:54px;border-radius:16px;border:1px solid var(--b2);background:var(--s2);font-size:1.6rem;cursor:pointer;display:flex;align-items:center;justify-content:center" class="meb" onclick="pickMood(this,'😐','okay')">😐</button>
+      <button style="width:54px;height:54px;border-radius:16px;border:1px solid var(--b2);background:var(--s2);font-size:1.6rem;cursor:pointer;display:flex;align-items:center;justify-content:center" class="meb" onclick="pickMood(this,'😊','good')">😊</button>
+      <button style="width:54px;height:54px;border-radius:16px;border:1px solid var(--b2);background:var(--s2);font-size:1.6rem;cursor:pointer;display:flex;align-items:center;justify-content:center" class="meb" onclick="pickMood(this,'⚡','fire')">⚡</button>
+    </div>
+    <button class="go-btn" id="mcBtn" style="opacity:0.4" onclick="launch()">Continue →</button>
+  </div>
+</div>
+
+<!-- HOME -->
+<div id="homeScreen" class="screen">
+  <div class="topbar">
+    <div class="tlogo">Inner<span>self</span> AI</div>
+    <div style="display:flex;align-items:center;gap:0.6rem">
+      <div class="spill">⚡ <span id="snum">1</span> day</div>
+      <div class="lpill" id="lpill" onclick="toggleLang()">EN</div>
+    </div>
+  </div>
+  <div class="hero">
+    <div style="font-size:0.68rem;letter-spacing:0.25em;text-transform:uppercase;color:var(--m1);margin-bottom:0.3rem" id="htime"></div>
+    <div class="hname" id="hname"></div>
+    <div class="mbadge" onclick="resetMood()">
+      <span id="micon">😊</span>
+      <span id="mlabel" style="font-size:0.72rem">Good</span>
+      <span style="color:var(--m1);font-size:0.65rem;margin-left:0.2rem">· tap to update</span>
+    </div>
+  </div>
+  <div class="lbwrap">
+    <div class="lbtop"><span id="msgLbl">Messages today</span><span id="msgCount">0 / 30</span></div>
+    <div class="lbbg"><div class="lbfill" id="lbf" style="width:0%"></div></div>
+  </div>
+  <div class="ewrap">
+    <button class="ebtn" onclick="emergencyPush()">⚡ <span id="elabel">Emergency Push — I need motivation NOW</span></button>
+  </div>
+  <div class="ccard" id="ccard">
+    <div class="cctop">
+      <div class="ccav" id="ccav">🦁</div>
+      <div><div class="ccname" id="ccname">KAREEM</div><div class="ccsub" id="ccsub">Your AI Bro · Always here</div></div>
+      <div class="odot"></div>
+    </div>
+    <div class="ccmsg loading" id="ccmsg">Loading your message...</div>
+    <div class="chist" id="chist"></div>
+    <div class="cinrow" id="chatRow">
+      <input class="cinp" id="cinp" placeholder="Talk to your coach..." onkeydown="if(event.key==='Enter')send()" />
+      <button class="csend" onclick="send()">↑</button>
+    </div>
+  </div>
+  <div class="slabel" id="qlab">Quick Push</div>
+  <div class="qgrid">
+    <div class="qc gym" onclick="quick('gym')"><span class="qi">💪</span><div class="qt" id="qtg">Gym Today</div><div class="qs" id="qsg">Smarter plan</div></div>
+    <div class="qc biz" onclick="quick('biz')"><span class="qi">🚀</span><div class="qt">Business</div><div class="qs" id="qsb">Focus now</div></div>
+    <div class="qc mind" onclick="quick('mind')"><span class="qi">🧠</span><div class="qt">Mindset</div><div class="qs" id="qsm">Feel lost?</div></div>
+    <div class="qc money" onclick="quick('money')"><span class="qi">💸</span><div class="qt" id="qtmo">Money</div><div class="qs" id="qsmo">Discipline</div></div>
+  </div>
+  <div class="slabel" id="ssched">Today's Schedule</div>
+  <div class="swrap">
+    <div id="slist"></div>
+    <div class="arow">
+      <input class="ainp" id="ntask" placeholder="Add task... e.g. Gym 18:00" onkeydown="if(event.key==='Enter')addTask()" />
+      <button class="abtn" onclick="addTask()">+</button>
+    </div>
+  </div>
+</div>
+
+<!-- GOALS -->
+<div id="goalsScreen" class="screen">
+  <div class="topbar"><div class="tlogo">Inner<span>self</span> AI</div><div class="spill">⚡ <span id="snum2">1</span> day</div></div>
+  <div class="page-title">My Goals 🎯</div>
+  <div class="page-sub">Set your goals, track progress.</div>
+  <div class="goals-wrap">
+    <div class="add-goal-card">
+      <div style="font-family:'Syne',sans-serif;font-weight:600;font-size:0.82rem;color:var(--m2);margin-bottom:0.8rem;letter-spacing:0.1em;text-transform:uppercase">Add New Goal</div>
+      <input class="goal-inp" id="goalTitle" placeholder="Goal title... e.g. Lose 5kg" />
+      <input class="goal-inp" id="goalDeadline" placeholder="Deadline... e.g. Aug 2025" />
+      <div class="cpick-row">
+        <div class="cpick active" style="background:var(--blue)" onclick="pickColor('blue',this)"></div>
+        <div class="cpick" style="background:var(--teal)" onclick="pickColor('teal',this)"></div>
+        <div class="cpick" style="background:var(--rose)" onclick="pickColor('rose',this)"></div>
+        <div class="cpick" style="background:var(--green)" onclick="pickColor('green',this)"></div>
+        <div class="cpick" style="background:var(--purple)" onclick="pickColor('purple',this)"></div>
+      </div>
+      <button class="goal-add-btn" onclick="addGoal()">+ Add Goal</button>
+    </div>
+    <div id="goalsList"></div>
+  </div>
+</div>
+
+<!-- STATS -->
+<div id="statsScreen" class="screen">
+  <div class="topbar"><div class="tlogo">Inner<span>self</span> AI</div><div class="spill">⚡ <span id="snum3">1</span> day</div></div>
+  <div class="page-title">My Stats 📊</div>
+  <div class="page-sub">Your journey so far.</div>
+  <div class="stat-grid">
+    <div class="stat-card"><div class="stat-num" id="statDays">1</div><div class="stat-label">Days Active</div></div>
+    <div class="stat-card"><div class="stat-num" id="statMsgs">0</div><div class="stat-label">Messages</div></div>
+    <div class="stat-card"><div class="stat-num" id="statGoals">0</div><div class="stat-label">Goals Set</div></div>
+    <div class="stat-card"><div class="stat-num" id="statStreak">1</div><div class="stat-label">Streak ⚡</div></div>
+  </div>
+</div>
+
+<!-- SETTINGS -->
+<div id="settingsScreen" class="screen">
+  <div class="topbar"><div class="tlogo">Inner<span>self</span> AI</div></div>
+  <div class="page-title">Settings ⚙️</div>
+  <div class="page-sub">Customize your experience.</div>
+  <div class="settings-wrap">
+    <div class="setting-item" onclick="openNameModal()">
+      <div class="set-icon">👤</div><div class="set-label">Your Name</div>
+      <div class="set-value" id="setName">—</div><div style="color:var(--m1)">›</div>
+    </div>
+    <div class="setting-item" onclick="openCoachModal()">
+      <div class="set-icon" id="setCoachIcon">🦁</div><div class="set-label">Your Coach</div>
+      <div class="set-value" id="setCoachName">Kareem</div><div style="color:var(--m1)">›</div>
+    </div>
+    <div class="setting-item" onclick="toggleLangSetting()">
+      <div class="set-icon">🌍</div><div class="set-label">Language</div>
+      <div class="set-value" id="setLang">English</div><div style="color:var(--m1)">›</div>
+    </div>
+
+    <div class="setting-item" style="margin-top:1rem"><div class="set-icon">📱</div><div class="set-label">Version</div><div class="set-value">Beta v6.0</div></div>
+    <div class="setting-item danger" onclick="resetApp()">
+      <div class="set-icon">🗑️</div><div class="set-label">Reset App</div><div style="color:var(--m1)">›</div>
+    </div>
+    <div style="text-align:center;padding:1.5rem;font-size:0.72rem;color:var(--m1)">Powered by AI · Made with ❤️</div>
+  </div>
+</div>
+
+<!-- NAV -->
+<div class="bnav" id="bnav" style="display:none">
+  <div class="ni active" onclick="navTo('home')"><div class="nico">🏠</div><div class="nlbl">Home</div></div>
+  <div class="ni" onclick="navTo('goals')"><div class="nico">🎯</div><div class="nlbl">Goals</div></div>
+  <div class="ni" onclick="navTo('stats')"><div class="nico">📊</div><div class="nlbl">Stats</div></div>
+  <div class="ni" onclick="navTo('settings')"><div class="nico">⚙️</div><div class="nlbl">Settings</div></div>
+</div>
+
+<!-- MODALS -->
+<div class="modal-overlay" id="nameModal">
+  <div class="modal">
+    <h3>Change Name</h3><p>How should your coach call you?</p>
+    <input class="modal-inp" id="newNameInp" placeholder="Your name..." />
+    <div class="modal-btns">
+      <button class="modal-cancel" onclick="closeModal('nameModal')">Cancel</button>
+      <button class="modal-confirm" onclick="saveName()">Save</button>
+    </div>
+  </div>
+</div>
+<div class="modal-overlay" id="coachModal">
+  <div class="modal">
+    <h3>Switch Coach</h3><p>Pick who guides you.</p>
+    <div class="cgrid" style="margin-bottom:1rem">
+      <div class="copt" id="mod-k" onclick="pickModalCoach('kareem')"><span class="ce">🦁</span><span class="cn">Kareem</span><span class="cd">Your AI Bro</span></div>
+      <div class="copt" id="mod-n" onclick="pickModalCoach('nour')"><span class="ce">🌙</span><span class="cn">Nour</span><span class="cd">Your AI Sis</span></div>
+    </div>
+    <div class="modal-btns">
+      <button class="modal-cancel" onclick="closeModal('coachModal')">Cancel</button>
+      <button class="modal-confirm" onclick="saveCoach()">Switch</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const SK='is_v6',AK='is_key',ML=30;
+let S={uname:'',coach:'kareem',lang:'en',mood:'good',moodEmoji:'😊',streak:1,msgCount:0,msgsToday:0,lastDate:'',goals:[],moodHistory:[],extras:[],onboarded:false};
+const SCHED=[
+  {time:'06:00',label:{en:'Morning Routine',de:'Morgenroutine'},color:'#4ade80',tag:{en:'Health',de:'Gesundheit'},tc:'rgba(74,222,128,0.1)',tt:'#4ade80'},
+  {time:'09:00',label:{en:'Deep Work',de:'Fokusarbeit'},color:'#5b9cf6',tag:{en:'Business',de:'Business'},tc:'rgba(91,156,246,0.1)',tt:'#5b9cf6'},
+  {time:'17:00',label:{en:'Workout',de:'Training'},color:'#3dd8c8',tag:{en:'Fitness',de:'Fitness'},tc:'rgba(61,216,200,0.1)',tt:'#3dd8c8'},
+  {time:'20:30',label:{en:'Learning',de:'Lernen'},color:'#a78bfa',tag:{en:'Growth',de:'Wachstum'},tc:'rgba(167,139,250,0.1)',tt:'#a78bfa'},
+];
+function sv(){try{localStorage.setItem(SK,JSON.stringify(S));}catch(e){}}
+function ld(){try{const d=localStorage.getItem(SK);if(d){S={...S,...JSON.parse(d)};return true;}}catch(e){}return false;}
+function gk(){return localStorage.getItem(AK)||'';}
+function saveApiKey(){
+  const k=document.getElementById('apiKeyInp').value.trim();
+  if(!k||!k.startsWith('sk-ant-')){alert('Please enter a valid API key (starts with sk-ant-)');return;}
+  localStorage.setItem(AK,k);
+  document.getElementById('apiSetup').style.display='none';
+  init();
+}
+function changeApiKey(){localStorage.removeItem(AK);location.reload();}
+window.onload=function(){
+  document.getElementById('apiSetup').style.display='none';
+  init();
+};
+function init(){
+  ld();
+  const today=new Date().toDateString();
+  if(S.lastDate!==today){S.msgsToday=0;S.lastDate=today;sv();}
+  if(S.onboarded){document.getElementById('onboarding').style.display='none';showMood();}
+  else{document.getElementById('onboarding').style.display='flex';}
+}
+function showMood(){
+  document.getElementById('moodScreen').style.display='flex';
+  document.getElementById('mav').textContent=S.coach==='kareem'?'🦁':'🌙';
+  const d=S.lang==='de';
+  document.getElementById('mq').textContent=d?`Wie geht's dir heute, ${S.uname}?`:`How are you feeling today, ${S.uname}?`;
+  document.getElementById('ms').textContent=d?'Sei ehrlich – dein Coach passt sich an.':'Be honest — your coach will adjust.';
+}
+function pickCoach(c){S.coach=c;document.getElementById('ok').className='copt'+(c==='kareem'?' sk':'');document.getElementById('on').className='copt'+(c==='nour'?' sn':'');}
+function pickLang(l){S.lang=l;document.getElementById('len').className='lopt'+(l==='en'?' active':'');document.getElementById('lde').className='lopt'+(l==='de'?' active':'');}
+function goMood(){
+  const n=document.getElementById('uName').value.trim();
+  if(!n){alert('Please enter your name!');return;}
+  S.uname=n;S.onboarded=true;sv();
+  document.getElementById('onboarding').style.display='none';showMood();
+}
+function pickMood(el,emoji,m){
+  S.mood=m;S.moodEmoji=emoji;
+  document.querySelectorAll('.meb').forEach(b=>{b.style.borderColor='var(--b2)';b.style.background='var(--s2)';});
+  el.style.borderColor='var(--blue)';el.style.background='rgba(91,156,246,0.12)';
+  document.getElementById('mcBtn').style.opacity='1';
+}
+async function launch(){
+  S.moodHistory.push({day:new Date().toLocaleDateString('en',{weekday:'short'}),mood:S.mood});sv();
+  document.getElementById('moodScreen').style.display='none';
+  document.getElementById('homeScreen').classList.add('active');
+  document.getElementById('bnav').style.display='flex';
+  setupHome();await welcome();
+}
+function setupHome(){
+  const h=new Date().getHours(),d=S.lang==='de';
+  let gt,ts;
+  if(h<12){gt=d?'Guten Morgen,':'Good morning,';ts=d?'Morgen':'Morning';}
+  else if(h<17){gt=d?'Guten Tag,':'Good afternoon,';ts=d?'Nachmittag':'Afternoon';}
+  else{gt=d?'Guten Abend,':'Good evening,';ts=d?'Abend':'Evening';}
+  document.getElementById('htime').textContent=ts;
+  document.getElementById('hname').innerHTML=`${gt}<br><span class="hl">${S.uname}.</span>`;
+  document.getElementById('micon').textContent=S.moodEmoji;
+  document.getElementById('mlabel').textContent=moodLbl();
+  document.getElementById('lpill').textContent=S.lang.toUpperCase();
+  ['snum','snum2','snum3'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=S.streak;});
+  const av=document.getElementById('ccav');
+  av.textContent=S.coach==='kareem'?'🦁':'🌙';av.className='ccav '+S.coach;
+  document.getElementById('ccard').className='ccard '+S.coach;
+  document.getElementById('ccname').textContent=S.coach==='kareem'?'KAREEM':'NOUR';
+  document.getElementById('ccname').className='ccname '+S.coach;
+  updateMsgUI();applyLang();renderSched();
+}
+function moodLbl(){
+  const m={exhausted:{en:'Exhausted',de:'Erschöpft'},low:{en:'Low',de:'Niedergeschlagen'},okay:{en:'Okay',de:'So lala'},good:{en:'Good',de:'Gut'},fire:{en:'On Fire',de:'Auf Hochtouren'}};
+  return(m[S.mood]||m.good)[S.lang];
+}
+function resetMood(){document.getElementById('moodScreen').style.display='flex';document.getElementById('homeScreen').classList.remove('active');}
+function updateMsgUI(){
+  const pct=Math.min((S.msgsToday/ML)*100,100);
+  document.getElementById('lbf').style.width=pct+'%';
+  document.getElementById('msgCount').textContent=`${S.msgsToday} / ${ML}`;
+  if(S.msgsToday>=ML){
+    const row=document.getElementById('chatRow');
+    if(row)row.innerHTML=`<div style="text-align:center;padding:0.8rem;font-size:0.82rem;color:var(--rose);border-top:1px solid var(--b1)">${S.lang==='de'?'Tageslimit erreicht! Morgen wieder.':'Daily limit reached! Come back tomorrow.'}</div>`;
+  }
+}
+function applyLang(){
+  const d=S.lang==='de';
+  document.getElementById('ccsub').textContent=S.coach==='kareem'?(d?'Dein AI Bro · Immer da':'Your AI Bro · Always here'):(d?'Deine AI Sis · Immer da':'Your AI Sis · Always here');
+  document.getElementById('elabel').textContent=d?'Notfall Push — Ich brauche Motivation JETZT':'Emergency Push — I need motivation NOW';
+  document.getElementById('qlab').textContent=d?'Schneller Push':'Quick Push';
+  document.getElementById('qtg').textContent=d?'Gym Heute':'Gym Today';
+  document.getElementById('qsb').textContent=d?'Fokus':'Focus now';
+  document.getElementById('qsm').textContent=d?'Verloren?':'Feel lost?';
+  document.getElementById('qtmo').textContent=d?'Geld':'Money';
+  document.getElementById('ssched').textContent=d?"Heute's Plan":"Today's Schedule";
+  document.getElementById('msgLbl').textContent=d?'Nachrichten heute':'Messages today';
+  document.getElementById('mlabel').textContent=moodLbl();
+  renderSched();
+}
+function toggleLang(){S.lang=S.lang==='en'?'de':'en';document.getElementById('lpill').textContent=S.lang.toUpperCase();applyLang();sv();}
+function toggleLangSetting(){S.lang=S.lang==='en'?'de':'en';applyLang();renderSettings();sv();}
+function sys(){
+  const d=S.lang==='de';
+  const mc={exhausted:'Be gentle.',low:'Lift them up.',okay:'Spark energy.',good:'Push further.',fire:'Match their energy!'}[S.mood]||'';
+  return S.coach==='kareem'
+    ?(d?`Du bist Kareem, der AI Bro von ${S.uname}. Herzlich, direkt. Kurze Sätze. ${mc} Auf Deutsch.`:`You are Kareem, ${S.uname}'s AI bro. Warm, direct. Short sentences. ${mc}`)
+    :(d?`Du bist Nour, die AI Sis von ${S.uname}. Warm, stark. Kurze Sätze. ${mc} Auf Deutsch.`:`You are Nour, ${S.uname}'s AI sis. Warm, strong. Short sentences. ${mc}`);
+}
+async function callAI(msg){
+  const body=JSON.stringify({model:'claude-sonnet-4-6',max_tokens:500,system:sys(),messages:[{role:'user',content:msg}]});
+  const r=await fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','x-api-key':'REPLACE_KEY_HERE','anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+    body
+  });
+  const data=await r.json();
+  if(data.error)throw new Error(data.error.message);
+  return data.content.map(i=>i.text||'').join('');
+}
+async function welcome(){
+  const el=document.getElementById('ccmsg');
+  el.className='ccmsg loading';el.textContent=S.lang==='de'?'Lädt...':'Loading...';
+  const h=new Date().getHours();const part=h<12?'morning':h<17?'afternoon':'evening';
+  try{
+    const t=await callAI(`It's ${part}, mood: ${S.mood}. Welcome ${S.uname} warmly. 2-3 sentences. Real friend energy.`);
+    el.className='ccmsg';el.textContent=t;
+  }catch(e){
+    el.className='ccmsg';
+    el.textContent=S.coach==='kareem'?`Yo ${S.uname}! Let's make today count. 💪`:`Hey ${S.uname}! So glad you're here. 🌟`;
+  }
+}
+function canSend(){return S.msgsToday<ML;}
+function bubble(txt,type){
+  const h=document.getElementById('chist');
+  const b=document.createElement('div');
+  b.className='bub '+(type==='u'?'bu':'bc');
+  b.textContent=txt;h.appendChild(b);h.scrollTop=h.scrollHeight;return b;
+}
+async function send(){
+  if(!canSend())return;
+  const inp=document.getElementById('cinp');const msg=inp.value.trim();if(!msg)return;
+  inp.value='';S.msgsToday++;S.msgCount++;sv();updateMsgUI();
+  bubble(msg,'u');const tb=bubble('...','c');tb.style.opacity='0.5';
+  try{const r=await callAI(msg);tb.textContent=r;tb.style.opacity='1';}
+  catch(e){tb.textContent=S.lang==='de'?'Fehler: '+e.message:'Error: '+e.message;tb.style.opacity='1';}
+  document.getElementById('chist').scrollTop=9999;
+}
+async function quick(type){
+  if(!canSend())return;
+  const d=S.lang==='de';
+  const p={
+    gym:d?`${S.uname} geht ins Gym. Smarter Tipp.`:`${S.uname} is going to the gym. Give one smart tip.`,
+    biz:`${S.uname} needs a business push now. Short and concrete.`,
+    mind:`${S.uname} needs mindset fuel. From the heart.`,
+    money:`${S.uname} wants money discipline. One tip for today.`
+  };
+  const lbl={gym:'💪 Gym',biz:'🚀 Business',mind:'🧠 Mindset',money:'💸 Money'};
+  bubble(lbl[type],'u');S.msgsToday++;S.msgCount++;sv();updateMsgUI();
+  const tb=bubble('...','c');tb.style.opacity='0.5';
+  try{const r=await callAI(p[type]);tb.textContent=r;tb.style.opacity='1';}
+  catch(e){tb.textContent='Error: '+e.message;tb.style.opacity='1';}
+  document.getElementById('chist').scrollTop=9999;
+}
+async function emergencyPush(){
+  if(!canSend())return;
+  const d=S.lang==='de';
+  bubble(d?'⚡ Notfall Push':'⚡ Emergency Push','u');S.msgsToday++;S.msgCount++;sv();updateMsgUI();
+  const tb=bubble('...','c');tb.style.opacity='0.5';
+  try{
+    const r=await callAI(d?`${S.uname} braucht JETZT Notfall-Push. Emotional, direkt. 3-4 Sätze.`:`${S.uname} needs EMERGENCY push NOW. Emotional, direct. 3-4 sentences that make them stand up.`);
+    tb.textContent=r;tb.style.opacity='1';
+  }catch(e){
+    tb.textContent=d?`${S.uname}, steh auf. Jetzt. Für dich.`:`${S.uname}, get up. Right now. For yourself.`;tb.style.opacity='1';
+  }
+  document.getElementById('chist').scrollTop=9999;
+}
+function renderSched(){
+  document.getElementById('slist').innerHTML=[...SCHED,...S.extras].map(s=>`
+    <div class="si"><div class="st">${s.time}</div><div class="sd" style="background:${s.color}"></div>
+    <div class="sl">${typeof s.label==='object'?s.label[S.lang]||s.label.en:s.label}</div>
+    <div class="stag" style="background:${s.tc};color:${s.tt}">${typeof s.tag==='object'?s.tag[S.lang]||s.tag.en:s.tag}</div></div>`).join('');
+}
+function addTask(){
+  const inp=document.getElementById('ntask');const v=inp.value.trim();if(!v)return;
+  const m=v.match(/(\d{1,2}:\d{2})/);const t=m?m[1]:'--:--';
+  const l=v.replace(/\d{1,2}:\d{2}(\s*[-–]\s*\d{1,2}:\d{2})?/,'').trim()||v;
+  S.extras.push({time:t,label:l,color:'#a78bfa',tag:'Custom',tc:'rgba(167,139,250,0.1)',tt:'#a78bfa'});
+  sv();renderSched();inp.value='';
+}
+let selColor='blue';
+function pickColor(c,el){selColor=c;document.querySelectorAll('.cpick').forEach(p=>p.classList.remove('active'));el.classList.add('active');}
+function addGoal(){
+  const t=document.getElementById('goalTitle').value.trim();if(!t)return;
+  const dl=document.getElementById('goalDeadline').value.trim();
+  S.goals.push({title:t,deadline:dl||'—',progress:0,color:selColor});
+  document.getElementById('goalTitle').value='';document.getElementById('goalDeadline').value='';
+  sv();renderGoals();document.getElementById('statGoals').textContent=S.goals.length;
+}
+function renderGoals(){
+  const list=document.getElementById('goalsList');
+  const cm={blue:'#5b9cf6',teal:'#3dd8c8',rose:'#f472b6',green:'#4ade80',purple:'#a78bfa'};
+  if(S.goals.length===0){list.innerHTML=`<div style="text-align:center;padding:2rem;color:var(--m1);font-size:0.85rem">No goals yet!</div>`;return;}
+  list.innerHTML=S.goals.map((g,i)=>`
+    <div class="goal-item ${g.color}">
+      <button class="goal-delete" onclick="deleteGoal(${i})">✕</button>
+      <div class="goal-top"><div class="goal-title-txt">${g.title}</div><div class="goal-pct">${g.progress}%</div></div>
+      <div class="goal-bar-bg"><div class="goal-bar-fill" style="width:${g.progress}%;background:${cm[g.color]}"></div></div>
+      <div style="display:flex;gap:0.5rem;align-items:center;margin-top:0.5rem">
+        <input type="range" min="0" max="100" value="${g.progress}" style="flex:1;accent-color:${cm[g.color]}" oninput="upGoal(${i},this.value)"/>
+        <div style="font-size:0.72rem;color:var(--m2)">📅 ${g.deadline}</div>
+      </div>
+    </div>`).join('');
+}
+function upGoal(i,val){S.goals[i].progress=parseInt(val);sv();document.querySelectorAll('.goal-item')[i].querySelector('.goal-pct').textContent=val+'%';document.querySelectorAll('.goal-item')[i].querySelector('.goal-bar-fill').style.width=val+'%';}
+function deleteGoal(i){S.goals.splice(i,1);sv();renderGoals();document.getElementById('statGoals').textContent=S.goals.length;}
+function renderStats(){
+  document.getElementById('statDays').textContent=S.streak;
+  document.getElementById('statMsgs').textContent=S.msgCount;
+  document.getElementById('statGoals').textContent=S.goals.length;
+  document.getElementById('statStreak').textContent=S.streak;
+}
+function renderSettings(){
+  document.getElementById('setName').textContent=S.uname;
+  document.getElementById('setCoachIcon').textContent=S.coach==='kareem'?'🦁':'🌙';
+  document.getElementById('setCoachName').textContent=S.coach==='kareem'?'Kareem':'Nour';
+  document.getElementById('setLang').textContent=S.lang==='en'?'English':'Deutsch';
+}
+function openNameModal(){document.getElementById('newNameInp').value=S.uname;document.getElementById('nameModal').classList.add('show');}
+function openCoachModal(){
+  document.getElementById('mod-k').className='copt'+(S.coach==='kareem'?' sk':'');
+  document.getElementById('mod-n').className='copt'+(S.coach==='nour'?' sn':'');
+  document.getElementById('coachModal').classList.add('show');
+}
+function closeModal(id){document.getElementById(id).classList.remove('show');}
+function saveName(){const n=document.getElementById('newNameInp').value.trim();if(!n)return;S.uname=n;sv();closeModal('nameModal');renderSettings();}
+let tempCoach='kareem';
+function pickModalCoach(c){tempCoach=c;document.getElementById('mod-k').className='copt'+(c==='kareem'?' sk':'');document.getElementById('mod-n').className='copt'+(c==='nour'?' sn':'');}
+function saveCoach(){
+  S.coach=tempCoach;sv();
+  const av=document.getElementById('ccav');av.textContent=S.coach==='kareem'?'🦁':'🌙';av.className='ccav '+S.coach;
+  document.getElementById('ccard').className='ccard '+S.coach;
+  document.getElementById('ccname').textContent=S.coach==='kareem'?'KAREEM':'NOUR';
+  document.getElementById('ccname').className='ccname '+S.coach;
+  applyLang();renderSettings();closeModal('coachModal');
+}
+function resetApp(){if(confirm('Reset?')){localStorage.clear();location.reload();}}
+function navTo(page){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.ni').forEach(n=>n.classList.remove('active'));
+  document.getElementById(page+'Screen').classList.add('active');
+  const idx={home:0,goals:1,stats:2,settings:3}[page];
+  document.querySelectorAll('.ni')[idx].classList.add('active');
+  if(page==='stats')renderStats();
+  if(page==='settings')renderSettings();
+  if(page==='goals')renderGoals();
+}
+</script>
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js');
+  });
+}
+</script>
+</body>
+</html>
